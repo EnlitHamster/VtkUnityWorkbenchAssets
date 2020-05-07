@@ -67,4 +67,9 @@ public class InvertParentsScaleBase : MonoBehaviour
 	{
 
 	}
+
+	public void ResetAwakeScale()
+	{
+		_awakeScale = transform.localScale;
+	}
 }

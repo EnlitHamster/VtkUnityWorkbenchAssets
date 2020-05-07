@@ -185,13 +185,16 @@ public class BoundingBox : MonoBehaviour {
 					new Vector3(colliderSizeM[axis]/edgeLength, 1.0f, 1.0f));
 
 				var edgeRotation = new Vector3(0.0f, 0.0f, 0.0f);
+				var edgeAxialRotationModifer = Vector3.right;
 
-				switch(axis){
+				switch (axis){
 					case (1):
-						edgeRotation = new Vector3(0.0f, 0.0f, 90.0f);
+						edgeRotation.z = -90.0f;
+						edgeAxialRotationModifer = Vector3.down;
 						break;
 					case (2):
-						edgeRotation = new Vector3(0.0f, 90.0f, 0.0f);
+						edgeRotation.y = 90.0f;
+						edgeAxialRotationModifer = Vector3.left;
 						break;
 				}
 
@@ -208,7 +211,25 @@ public class BoundingBox : MonoBehaviour {
 								edgePositionMin + Vector3.Scale(rotationAxesFactor, edgeMaxOffset));
 
 						edge.transform.localScale = edgeScale;
-						edge.transform.localEulerAngles = edgeRotation;
+
+						var edgeAxialRotation = 0.0f;
+
+						if (1 == axisA)
+						{
+							edgeAxialRotation = 90.0f;
+
+							if (1 == axisB)
+							{
+								edgeAxialRotation = 180.0f;
+							}
+						}
+						else if (1 == axisB)
+						{
+							edgeAxialRotation = -90.0f;
+						}
+
+						edge.transform.localEulerAngles =
+							edgeRotation + (edgeAxialRotation * edgeAxialRotationModifer);
 
 						_edges.Add(edge);
 					}

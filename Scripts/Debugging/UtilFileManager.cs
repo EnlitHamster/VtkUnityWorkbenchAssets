@@ -20,7 +20,7 @@ public class UtilFileManager : GenericSingletonClass<UtilFileManager>
 
 	public string OutputPathDateTimeName(string extension)
 	{
-		var name = new DirectoryInfo(DataStore.Instance.DataFolder).Name;
+		var name = new DirectoryInfo(DataStore.Instance.ImageDataFolder).Name;
 		return OutputPathDateTimeName(name, extension);
 	}
 

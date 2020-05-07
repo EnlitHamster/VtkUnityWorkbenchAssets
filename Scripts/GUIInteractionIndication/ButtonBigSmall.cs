@@ -6,14 +6,7 @@ using UnityEngine.UI;
 public class ButtonBigSmall : MonoBehaviour {
 
 	private Animator _animator;
-	//public AudioSource Audio;
-	//public AudioClip PlayClip;
-	//public AudioClip PauseClip;
-	//public bool Play = false;
 	private Toggle _toggleScript;
-
-	//[Range(0.5f, 5.0f)]
-	//public float Speed = 5.0f;
 
 	// Use this for initialization
 	void Start ()
@@ -21,27 +14,13 @@ public class ButtonBigSmall : MonoBehaviour {
 		_animator = GetComponentInChildren<Animator>();
 		_animator.speed = 6.0f;
 		_toggleScript = GetComponent<Toggle>();
-		//Audio = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
-	void Update ()
-	{
-		//if (!_animator)
-		//{
-		//	return;
-		//}
-
-		//_animator.speed = Speed;
-		//if (Input.GetKeyDown("u"))
-		//{
-		//	_animator.Play("Bigger");
-		//}
-		//else if (Input.GetKeyDown("y"))
-		//{
-		//	_animator.Play("Smaller");
-		//}
-	}
+//	void Update ()
+//	{
+//
+//	}
 
 	public void OnTriggerEnter(Collider other)
 	{
@@ -117,12 +96,5 @@ public class ButtonBigSmall : MonoBehaviour {
 		{
 			_animator.Play("WhiteToBrightQuick", -1, 0.0f);
 		}
-
-		//if (_animator == null)
-		//{
-		//	return;
-		//}
-
-		//_animator.Play("PressBrighten", -1, 0.0f);
 	}
 }

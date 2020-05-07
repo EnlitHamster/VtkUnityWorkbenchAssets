@@ -27,4 +27,9 @@ public class IndicatorBase : MonoBehaviour
 			_indicate = value;
 		}
 	}
+
+    private void Awake()
+    {
+        Indicate = IndicateState.Off;
+    }
 }

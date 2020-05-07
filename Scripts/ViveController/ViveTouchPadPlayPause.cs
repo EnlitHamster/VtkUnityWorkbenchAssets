@@ -34,13 +34,13 @@ public class ViveTouchPadPlayPause : MonoBehaviour {
     void OnEnable()
     {
         if (null != AnimationPlayPauseBoolean)
-	{
+        {
             AnimationPlayPauseBoolean.AddOnStateDownListener(OnAnimationPlayPausePressed, InputSource);
         }
-	}
-	
+    }
+
     void OnDisable()
-	{
+    {
         if (null != AnimationPlayPauseBoolean)
         {
             AnimationPlayPauseBoolean.RemoveOnStateDownListener(OnAnimationPlayPausePressed, InputSource);
@@ -48,10 +48,10 @@ public class ViveTouchPadPlayPause : MonoBehaviour {
     }
 
     private void OnAnimationPlayPausePressed(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource) 
-		{
-            if (ToggleButton && ToggleButton.GetComponent<Toggle>())
-            {
-                ToggleButton.GetComponent<Toggle>().isOn = !ToggleButton.GetComponent<Toggle>().isOn;
-            }
+    {
+        if (ToggleButton && ToggleButton.GetComponent<Toggle>())
+        {
+            ToggleButton.GetComponent<Toggle>().isOn = !ToggleButton.GetComponent<Toggle>().isOn;
         }
+    }
 }

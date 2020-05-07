@@ -5,7 +5,7 @@ using UnityEngine;
 public class DataStore : GenericSingletonClass<DataStore>
 {
 	// Data folders for DICOM, MHD etc. -------------------------------------------------
-	public string[] DataFolders = new string[1];
+	public string[] ImageDataFolders = new string[1];
 	public int IDataFolder = 0;
 
 	public bool GeneratePaddingMask = false;
@@ -19,16 +19,16 @@ public class DataStore : GenericSingletonClass<DataStore>
 		}
 	}
 
-	public string DataFolder
+	public string ImageDataFolder
 	{
 		get
 		{
-			if (0 > IDataFolder || DataFolders.Length <= IDataFolder)
+			if (0 > IDataFolder || ImageDataFolders.Length <= IDataFolder)
 			{
 				throw new System.Exception("Data Folders not initialised, or data folder index out of range");
 			}
 
-			return DataFolders[IDataFolder];
+			return ImageDataFolders[IDataFolder];
 		}
 	}
 
