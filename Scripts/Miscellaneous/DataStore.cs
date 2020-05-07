@@ -15,7 +15,7 @@ public class DataStore : GenericSingletonClass<DataStore>
 	{
 		get
 		{
-			return DataFolders.Length;
+			return ImageDataFolders.Length;
 		}
 	}
 

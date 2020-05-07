@@ -151,7 +151,7 @@ public class VtkVolumeRenderLoadControl : VtkVolumeRenderCore
 
 	public void LoadDicomOrMhdFromFolder()
 	{
-		var dataFolder = DataStore.Instance.DataFolder;
+		var dataFolder = DataStore.Instance.ImageDataFolder;
 
 		if (!Directory.Exists(dataFolder))
 		{

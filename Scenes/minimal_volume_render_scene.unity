@@ -559,7 +559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5df5c1529c35404bb350b23d48e4b60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DataFolders:
+  ImageDataFolders:
   - Data
   IDataFolder: 0
   GeneratePaddingMask: 1
