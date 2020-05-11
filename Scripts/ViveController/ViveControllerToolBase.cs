@@ -15,11 +15,39 @@ public class ViveControllerToolBase : MonoBehaviour {
 
     protected GameObject _iconParent;
     protected GameObject _icon;
-	protected int _iconCloneIndex = 0;
+	//protected int _iconCloneIndex = 0;
 
 	protected bool _active;
 
-	public virtual bool Busy()
+    protected string _id = "XX";
+    public string Id
+    {
+        get
+        {
+            return _id;
+        }
+        //set
+        //{
+        //    _id = value;
+        //}
+    
+    }
+
+    protected string _zone = "";
+    public string Zone
+    {
+        get
+        {
+            return _zone;
+        }
+        //set
+        //{
+        //    _id = value;
+        //}
+
+    }
+
+    public virtual bool Busy()
 	{
 		return false;
 	}
@@ -95,10 +123,20 @@ public class ViveControllerToolBase : MonoBehaviour {
             icon.transform.parent = _iconParent.transform;
             icon.transform.localPosition = Vector3.zero;
 
-			icon.name = icon.name + " " + _iconCloneIndex.ToString();
-			_iconCloneIndex += 1;
+            var iconIdBase = GetComponentInChildren<IconIdBase>();
+            if (!iconIdBase)
+            {
+                //icon.name = icon.name + " " + iconIdBase.Handle;
+            //}
+            //else
+            //{
+            //	icon.name = icon.name + " " + _iconCloneIndex.ToString();
+            //	_iconCloneIndex += 1;
+                return null;
+            }
 
-			return icon;
+            icon.name = icon.name + " " + iconIdBase.Handle;
+            return icon;
         }
 
         return null;

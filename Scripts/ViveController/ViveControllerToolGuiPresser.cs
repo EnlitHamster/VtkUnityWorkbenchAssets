@@ -11,6 +11,12 @@ public class ViveControllerToolGuiPresser : ViveControllerToolBase {
 
 	public GuiPointerInOut PointerInOut = new GuiPointerInOut();
 
+    public ViveControllerToolGuiPresser()
+    {
+        _id = "UIP";
+        _zone = "SwitchToUI";
+    }
+
     protected override void OnEnable()
     {
         base.OnEnable();

@@ -18,7 +18,12 @@ public class ViveControllerToolMove : ViveControllerToolBase {
 		Exit
 	};
 
-	public override bool Busy()
+    public ViveControllerToolMove()
+    {
+        _id = "MO";
+    }
+
+    public override bool Busy()
 	{
 		return (_objectInHand);
 	}
