@@ -123,15 +123,9 @@ public class ViveControllerToolBase : MonoBehaviour {
             icon.transform.parent = _iconParent.transform;
             icon.transform.localPosition = Vector3.zero;
 
-            var iconIdBase = GetComponentInChildren<IconIdBase>();
+            var iconIdBase = icon.GetComponentInChildren<IconIdBase>();
             if (!iconIdBase)
             {
-                //icon.name = icon.name + " " + iconIdBase.Handle;
-            //}
-            //else
-            //{
-            //	icon.name = icon.name + " " + _iconCloneIndex.ToString();
-            //	_iconCloneIndex += 1;
                 return null;
             }
 
