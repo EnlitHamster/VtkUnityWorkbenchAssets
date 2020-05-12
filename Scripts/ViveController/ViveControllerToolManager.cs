@@ -23,14 +23,17 @@ public class ViveControllerToolManager : MonoBehaviour
 
 	public void OnTriggerEnter(Collider other)
 	{
+		//Debug.Log("ToolManager: OnTriggerEnter: Start: " + LayerMask.LayerToName(other.gameObject.layer));
 		var zoneTool = GetToolForZone(other.gameObject.layer);
 		if (zoneTool &&
 			!CurrentTool().Busy() &&
 			!CurrentToolIsZoneTool())
 		{
+			//Debug.Log("ToolManager: OnTriggerEnter: Updating to zone tool: " + zoneTool.Id + ", " + zoneTool.Zone);
 			_requestedMode = _mode;
 			UpdateMode(zoneTool.Id);
 		}
+		//Debug.Log("ToolManager: OnTriggerEnter: End: " + LayerMask.LayerToName(other.gameObject.layer));
 	}
 
 	//public void OnTriggerStay(Collider other)
@@ -74,22 +77,29 @@ public class ViveControllerToolManager : MonoBehaviour
 
 	public void SelectMode(string mode)
 	{
-		if (!CurrentToolIsZoneTool())
+		//Debug.Log("ToolManager: SelectMode: Start: " + mode);
+		if (CurrentToolIsZoneTool())
 		{
-			UpdateMode(mode);
+			//Debug.Log("ToolManager: SelectMode: Requesting Mode: " + mode);
+			_requestedMode = mode;
 			return;
 		}
 
-		_requestedMode = mode;
+		//Debug.Log("ToolManager: SelectMode: Updating to Mode: " + mode);
+		UpdateMode(mode);
+		//Debug.Log("ToolManager: SelectMode: End");
 	}
 
 	private void UpdateMode(string requestedMode)
 	{
+		//Debug.Log("ToolManager: UpdateMode: Start: " + requestedMode);
 		if (_mode == requestedMode)
 		{
+			//Debug.Log("ToolManager: UpdateMode: Early Exit: " + _mode + " == " + requestedMode);
 			return;
 		}
 
+		//Debug.Log("ToolManager: UpdateMode: DeActivating Tools");
 		foreach (var tool in _tools)
 		{
 			if (tool)
@@ -102,14 +112,16 @@ public class ViveControllerToolManager : MonoBehaviour
 			var tool = GetTool(requestedMode);
 			if (!tool)
 			{
+				//Debug.Log("ToolManager: UpdateMode: Requested tool found, using default: " + DefaultMode);
 				// fall back to move if line measurement is not available and asked for
 				requestedMode = DefaultMode;
 			}
 
+			//Debug.Log("ToolManager: UpdateMode: Activating Tool");
 			tool.Activate();
-
 			_mode = requestedMode;
 		}
+		//Debug.Log("ToolManager: UpdateMode: End");
 	}
 
 	private ViveControllerToolBase CurrentTool()
