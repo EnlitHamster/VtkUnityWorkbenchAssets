@@ -16,6 +16,7 @@ public class TransferFunctionNextPrevious : MonoBehaviour
 
 	private void Start()
 	{
+		Debug.Log("TransferFunctionNextPrevious::Start");
 		VtkToUnityPlugin.SetTransferFunctionIndex(_iTransferFunction);
 		_nTransferFunctions = VtkToUnityPlugin.GetNTransferFunctions();
 
