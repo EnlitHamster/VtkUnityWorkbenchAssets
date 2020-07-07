@@ -218,7 +218,8 @@ public class VtkVolumeRenderLoadControl : VtkVolumeRenderCore
 			_oldTransferFunctionIndex = TransferFunctionIndex;
 		}
 
-		if (_oldVolumeWindowWidth != VolumeWindowWidth || _oldVolumeWindowLevel != VolumeWindowLevel)
+		if (_oldVolumeWindowWidth != VolumeWindowWidth 
+			|| _oldVolumeWindowLevel != VolumeWindowLevel)
 		{
 			VtkToUnityPlugin.SetVolumeWWWL(VolumeWindowWidth, VolumeWindowLevel);
 			_oldVolumeWindowWidth = VolumeWindowWidth;
