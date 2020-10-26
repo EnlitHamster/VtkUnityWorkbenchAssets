@@ -41,52 +41,69 @@ public class ViveControllerToolMove : ViveControllerToolBase {
             return;
         }
 
+        // Debug.Log("ViveControllerToolMove::OnTriggerEnterImpl - other is Movable - " + other.name);
+
         // push into stack
         if (_colliderStack.Count > 0)
         {
+            // if this object is in the stack ignore it
+            // occurs after a move tool release event
+            if (_colliderStack.Contains(other.transform))
+            {
+                return;
+            }
+
             // if  the new collider's child is already in the stack
             if(_colliderStack.Last().IsChildOf(other.transform))
             {
                 // insert it before the child
                 _colliderStack.Insert(_colliderStack.Count -1, other.transform);
+                // Debug.Log("ViveControllerToolMove::OnTriggerEnterImpl - Stack Insert - " + _colliderStack.Count().ToString());
                 return;
             }
         }
 
         _colliderStack.Add(other.transform);
+        // Debug.Log("ViveControllerToolMove::OnTriggerEnterImpl - Stack Add - " + _colliderStack.Count().ToString());
 
         SetCollidingObject(other.gameObject, ColliderSource.Enter);
+        // Debug.Log("ViveControllerToolMove::OnTriggerEnterImpl - Set colliding Object - " + _collidingObject.name);
     }
 
 
-	protected override void OnTriggerExitImpl(Collider other)
+    protected override void OnTriggerExitImpl(Collider other)
     {
-		//Debug.Log("OnTriggerExitImpl");
+		// Debug.Log("OnTriggerExitImpl");
 
         if (!other.CompareTag("Movable"))
         {
             return;
         }
 
+        // Debug.Log("ViveControllerToolMove::OnTriggerExitImpl - other is Movable - " + other.name);
         if (!_collidingObject)
         {
             _colliderStack.Remove(other.transform);
+            // Debug.Log("ViveControllerToolMove::OnTriggerExitImpl - Stack Remove - " + _colliderStack.Count().ToString());
             return;
         }
 
         // pop from stack
         if (_colliderStack.Count == 0)
         {
+            // Debug.Log("ViveControllerToolMove::OnTriggerExitImpl - Exit - stack count zero");
             return;
         }
         
         if (_colliderStack.Last() == other.transform)
         {
             _colliderStack.Remove(_colliderStack.Last());
+            // Debug.Log("ViveControllerToolMove::OnTriggerExitImpl - Remove Last - " + _colliderStack.Count().ToString());
         }
         else if(_colliderStack.Contains(other.transform))
         {
             _colliderStack.Remove(other.transform);
+            // Debug.Log("ViveControllerToolMove::OnTriggerExitImpl - Remove Other, Exit - " + _colliderStack.Count().ToString());
             return;
         }
 
@@ -100,10 +117,12 @@ public class ViveControllerToolMove : ViveControllerToolBase {
         if (_colliderStack.Count > 0)
         {
             SetCollidingObject(_colliderStack.Last().gameObject, ColliderSource.Exit);
+            // Debug.Log("ViveControllerToolMove::OnTriggerExitImpl - Set colliding Object - " + _collidingObject.name);
         }
         else
         {
             _collidingObject = null;
+            // Debug.Log("ViveControllerToolMove::OnTriggerExitImpl - Set colliding object to null");
         }
     }
 
@@ -175,15 +194,20 @@ public class ViveControllerToolMove : ViveControllerToolBase {
 			return;
 		}
 
-		_objectInHand = _collidingObject;
+        // Debug.Log("ViveControllerToolMove::GrabObject - valid colliding object");
+
+        _objectInHand = _collidingObject;
 		_collidingObject = null;
 
-		GrabActionsUtils.Instance.GrabOrRelease(_objectInHand, GrabActionsBase.GrabReleaseActions.OnPreGrab);
+        // Debug.Log("ViveControllerToolMove::GrabObject - object in hand - " + _objectInHand.name);
+
+        GrabActionsUtils.Instance.GrabOrRelease(_objectInHand, GrabActionsBase.GrabReleaseActions.OnPreGrab);
 
 		_objectInHandOldParent = _objectInHand.transform.parent;
 		_objectInHand.transform.parent = transform;
 
-		SetGameObjectIndicationState(_objectInHand, IndicatorBase.IndicateState.Active);
+        // Debug.Log("ViveControllerToolMove::GrabObject - object in hand old parent - " + _objectInHandOldParent.name);
+        SetGameObjectIndicationState(_objectInHand, IndicatorBase.IndicateState.Active);
 
 		GrabActionsUtils.Instance.GrabOrRelease(_objectInHand, GrabActionsBase.GrabReleaseActions.OnPostGrab);
 	}
@@ -192,35 +216,40 @@ public class ViveControllerToolMove : ViveControllerToolBase {
 	{
 		GrabActionsUtils.Instance.GrabOrRelease(_objectInHand, GrabActionsBase.GrabReleaseActions.OnPreRelease);
 
-		_objectInHand.transform.parent = _objectInHandOldParent;
+        // Debug.Log("ViveControllerToolMove::ReleaseObject");
+
+        _objectInHand.transform.parent = _objectInHandOldParent;
 		_objectInHandOldParent = null;
 
 		SetGameObjectIndicationState(_objectInHand, IndicatorBase.IndicateState.Highlight);
 
 		GrabActionsUtils.Instance.GrabOrRelease(_objectInHand, GrabActionsBase.GrabReleaseActions.OnPostRelease);
-		Debug.Log("PostRelease action");
+		// Debug.Log("PostRelease action");
 
 		var thisCollider = GetComponent<BoxCollider>();
 		var otherCollider = _objectInHand.GetComponent<Collider>();
 		var direction = Vector3.zero;
 		float distance = 0.0f;
-		if (thisCollider && otherCollider && false == Physics.ComputePenetration(
-				thisCollider,
-				transform.TransformPoint(thisCollider.center),
-				transform.rotation,
-				otherCollider,
-				otherCollider.transform.position,
-				otherCollider.transform.rotation,
-				out direction,
-				out distance))
-		//{
-		//	Debug.Log("Release Penetration Test - TRUE");
-		//}
-		//else
-		{
-			Debug.Log("Release Penetration Test - FALSE");
-			SetGameObjectIndicationState(_objectInHand, IndicatorBase.IndicateState.Off);
-		}
+        if (thisCollider && otherCollider)
+        {
+            if (false == Physics.ComputePenetration(
+                thisCollider,
+                transform.TransformPoint(thisCollider.center),
+                transform.rotation,
+                otherCollider,
+                otherCollider.transform.position,
+                otherCollider.transform.rotation,
+                out direction,
+                out distance))
+            //{
+            //	Debug.Log("Release Penetration Test - TRUE");
+            //}
+            //else
+            {
+                // Debug.Log("Release Penetration Test - FALSE");
+                SetGameObjectIndicationState(_objectInHand, IndicatorBase.IndicateState.Off);
+            }
+        }
 
 		_objectInHand = null;
 	}
