@@ -224,9 +224,9 @@ public class ViveControllerToolMove : ViveControllerToolBase {
 		SetGameObjectIndicationState(_objectInHand, IndicatorBase.IndicateState.Highlight);
 
 		GrabActionsUtils.Instance.GrabOrRelease(_objectInHand, GrabActionsBase.GrabReleaseActions.OnPostRelease);
-		// Debug.Log("PostRelease action");
+        // Debug.Log("ViveControllerToolMove::ReleaseObject - PostRelease action");
 
-		var thisCollider = GetComponent<BoxCollider>();
+        var thisCollider = GetComponent<BoxCollider>();
 		var otherCollider = _objectInHand.GetComponent<Collider>();
 		var direction = Vector3.zero;
 		float distance = 0.0f;
@@ -246,12 +246,16 @@ public class ViveControllerToolMove : ViveControllerToolBase {
             //}
             //else
             {
-                // Debug.Log("Release Penetration Test - FALSE");
+                // Debug.Log("ViveControllerToolMove::ReleaseObject - Release Penetration Test - FALSE");
                 SetGameObjectIndicationState(_objectInHand, IndicatorBase.IndicateState.Off);
             }
         }
+        // else
+        // {
+        //    Debug.Log("ViveControllerToolMove::ReleaseObject - a collider is missing");
+        // }
 
-		_objectInHand = null;
+        _objectInHand = null;
 	}
 
 	protected virtual void SetGameObjectIndicationState(
