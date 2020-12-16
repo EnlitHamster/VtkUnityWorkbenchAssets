@@ -7,10 +7,8 @@ public class VtkMprRenderBack : VtkMprRender
 {
     public VtkMprRender FrontMpr = null;
 
-    new
-
-        // Use this for initialization
-        IEnumerator Start ()
+    // Use this for initialization
+    new protected IEnumerator Start()
     {
         if (null == FrontMpr)
         {
@@ -22,4 +20,8 @@ public class VtkMprRenderBack : VtkMprRender
         yield return base.Start();
     }
 
+    protected override void CallPluginAtEndOfFramesImpl()
+    {
+        UpdateMPRTransform();
+    }
 }
