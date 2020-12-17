@@ -107,7 +107,7 @@ public class VtkVolumeRenderLoadControl : VtkVolumeRenderCore
 		LoadDicomOrMhdFromFolder();
 
 		TransferFunctionIndex = VtkToUnityPlugin.GetTransferFunctionIndex();
-		Debug.Log("VtkVolumeRenderLoadControl::StartImpl - GetTransferFunctionIndex: " + TransferFunctionIndex.ToString());
+		// Debug.Log("VtkVolumeRenderLoadControl::StartImpl - GetTransferFunctionIndex: " + TransferFunctionIndex.ToString());
 		_oldTransferFunctionIndex = TransferFunctionIndex;
 
 		VtkToUnityPlugin.SetVolumeWWWL(VolumeWindowWidth, VolumeWindowLevel);
@@ -215,7 +215,7 @@ public class VtkVolumeRenderLoadControl : VtkVolumeRenderCore
 
 		if (_oldTransferFunctionIndex != TransferFunctionIndex)
 		{
-			Debug.Log("VtkVolumeRenderLoadControl::CallPluginAtEndOfFramesBody - SetTransferFunctionIndex: " + TransferFunctionIndex.ToString());
+			// Debug.Log("VtkVolumeRenderLoadControl::CallPluginAtEndOfFramesBody - SetTransferFunctionIndex: " + TransferFunctionIndex.ToString());
 			VtkToUnityPlugin.SetTransferFunctionIndex(TransferFunctionIndex);
 			_oldTransferFunctionIndex = TransferFunctionIndex;
 		}

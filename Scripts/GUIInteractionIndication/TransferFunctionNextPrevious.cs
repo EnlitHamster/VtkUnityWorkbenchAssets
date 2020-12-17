@@ -16,7 +16,7 @@ public class TransferFunctionNextPrevious : MonoBehaviour
 
 	private void Start()
 	{
-		Debug.Log("TransferFunctionNextPrevious::Start - GetTransferFunctionIndex: " + _iTransferFunction.ToString());
+		// Debug.Log("TransferFunctionNextPrevious::Start - GetTransferFunctionIndex: " + _iTransferFunction.ToString());
 		_iTransferFunction = VtkToUnityPlugin.GetTransferFunctionIndex();
 		_nTransferFunctions = VtkToUnityPlugin.GetNTransferFunctions();
 
@@ -35,7 +35,7 @@ public class TransferFunctionNextPrevious : MonoBehaviour
 			_iTransferFunction = 0;
 		}
 
-		Debug.Log("TransferFunctionNextPrevious::OnNextTransferFunction - SetTransferFunctionIndex: " + _iTransferFunction.ToString());
+		// Debug.Log("TransferFunctionNextPrevious::OnNextTransferFunction - SetTransferFunctionIndex: " + _iTransferFunction.ToString());
 		VtkToUnityPlugin.SetTransferFunctionIndex(_iTransferFunction);
 
 		if (!CounterText)
@@ -53,7 +53,7 @@ public class TransferFunctionNextPrevious : MonoBehaviour
 			_iTransferFunction = _nTransferFunctions - 1;
 		}
 
-		Debug.Log("TransferFunctionNextPrevious::OnPreviousTransferFunction - SetTransferFunctionIndex: " + _iTransferFunction.ToString());
+		// Debug.Log("TransferFunctionNextPrevious::OnPreviousTransferFunction - SetTransferFunctionIndex: " + _iTransferFunction.ToString());
 		VtkToUnityPlugin.SetTransferFunctionIndex(_iTransferFunction);
 
 		if (!CounterText)

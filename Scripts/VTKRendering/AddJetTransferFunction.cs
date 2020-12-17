@@ -41,22 +41,12 @@ public class AddJetTransferFunction : MonoBehaviour {
             _transferFunctionId,
             0.5, 0.5, 0.0, 0.0, 1.0);
 
-        //DontDestroyOnLoad(this.gameObject);
         if (MakeDefault)
         {
             Debug.Log("AddJetTransferFunction::Start - SetTransferFunctionIndex: " + _transferFunctionId.ToString());
             VtkToUnityPlugin.SetTransferFunctionIndex(_transferFunctionId);
         }
     }
-
-    //private void Update()
-    //{
-    //    if (MakeDefault)
-    //    {
-    //        VtkToUnityPlugin.SetTransferFunctionIndex(_transferFunctionId);
-    //        MakeDefault = false;
-    //    }
-    //}
 
     void OnApplicationQuit()
     {

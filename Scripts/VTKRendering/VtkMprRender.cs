@@ -76,48 +76,6 @@ public class VtkMprRender : MonoBehaviour {
 
 			if (_volumeMPRPropId > -1)
             {
-                //// only update the mpr position if we are the front
-                //// i.e. the front mpr id is less than zero
-                //if (_frontMprId < 0)
-                //{
-                //    Vector3 unitScale = new Vector3(1.0f, 1.0f, 1.0f);
-
-                //    Vector3 inversedPosition = _volumeProxy.transform.InverseTransformPoint(
-                //        CropPlane.transform.position);
-                //    Vector3 mprPosition = new Vector3(
-                //        inversedPosition.x,
-                //        inversedPosition.y,
-                //        inversedPosition.z * 1.0f);
-
-                //    // rotation of the normal of the crop plane
-                //    Quaternion rot = Quaternion.FromToRotation(
-                //        _initNormal,
-                //        _volumeProxy.transform.InverseTransformDirection(
-                //            CropPlane.transform.up));
-                //    // apply rotation of the normal to the crop plane
-                //    Quaternion mprRotation = rot * _initCropRotation;//inversedRotation;
-                //    // convert from vtk coord sys to unity coord sys
-                //    Quaternion rotatedRotation =
-                //        mprRotation * Quaternion.Euler(90.0f, 0.0f, 0.0f);
-                //    // if not ignoring rotation around normal then rotatedRotation should be
-                //    //Quaternion.Inverse(_volumeProxy.transform.rotation) * CropPlane.transform.rotation * Quaternion.Euler(90, 0, 0)
-
-                //    Matrix4x4 unityMatrix =
-                //        //Matrix4x4.TRS(transform.localPosition, rotatedRotation, unitScale);
-                //        Matrix4x4.TRS(mprPosition, rotatedRotation, unitScale);
-                //    VtkToUnityPlugin.Float16 pluginMatrix =
-                //        VtkToUnityPlugin.UnityMatrix4x4ToFloat16(unityMatrix);
-                //    SetMPRTransform(pluginMatrix);
-
-                //    _oldUnityMatrix = unityMatrix;
-                //}
-
-                //// update MPR position
-                //{
-                //    var _unityMatrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.localScale);
-                //    var _pluginMatrix = VtkToUnityPlugin.UnityMatrix4x4ToFloat16(_unityMatrix);
-                //    VtkToUnityPlugin.SetProp3DTransform(_volumeMPRPropId, _pluginMatrix);
-                //}
                 CallPluginAtEndOfFramesImpl();
             }
 		}

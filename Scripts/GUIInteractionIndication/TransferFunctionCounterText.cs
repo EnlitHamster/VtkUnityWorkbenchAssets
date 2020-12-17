@@ -10,7 +10,7 @@ public class TransferFunctionCounterText : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-		Debug.Log("TransferFunctionCounterText::Start");
+		// Debug.Log("TransferFunctionCounterText::Start");
 		_textUi = GetComponent<TextMeshPro>();
 		string dataStr = (1).ToString() + "/" + (1).ToString();
 		_textUi.text = dataStr;
@@ -19,7 +19,7 @@ public class TransferFunctionCounterText : MonoBehaviour
 
 	public void SetCount(int i, int n)
 	{
-		Debug.Log("TransferFunctionCounterText::SetCount");
+		// Debug.Log("TransferFunctionCounterText::SetCount");
 		string dataStr = (i + 1).ToString() + "/" + n.ToString();
 		_textUi.text = dataStr;
 	}
