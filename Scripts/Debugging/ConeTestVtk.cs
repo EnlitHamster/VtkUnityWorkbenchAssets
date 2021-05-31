@@ -84,6 +84,8 @@ public class ConeTestVtk : MonoBehaviour
         var coneCenter = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Center");
         var coneDirection = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Direction");
 
+        var descriptor = VtkUnityWorkbenchPlugin.GetDescriptor(id);
+
         var coneFactory = new VtkConeSourceUIFactory();
         VtkUnityWorkbenchPlugin.RegisterComponentFactory("vtkConeSource", coneFactory);
 
