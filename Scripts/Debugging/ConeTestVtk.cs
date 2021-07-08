@@ -45,7 +45,7 @@ public class ConeTestVtk : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        const int cone = 2;
+        const string cone = "vtkConeSource";
         const bool wireframe = false;
 
         Vector3 scale = new Vector3(ConeScale, ConeScale, ConeScale);
@@ -76,13 +76,13 @@ public class ConeTestVtk : MonoBehaviour
         VtkUnityWorkbenchPlugin.SetProperty<double>(id, "Radius", 0.1f);
         VtkUnityWorkbenchPlugin.SetProperty(id, "Resolution", 200);
 
-        var coneHeight = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Height");
-        var coneRadius = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Radius");
-        var coneResolution = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Resolution");
-        var coneAngle = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Angle");
-        var coneCapping = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Capping");
-        var coneCenter = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Center");
-        var coneDirection = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Direction");
+        var coneHeight = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Height", VtkUnityWorkbenchHelpers.DOUBLE);
+        var coneRadius = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Radius", VtkUnityWorkbenchHelpers.DOUBLE);
+        var coneResolution = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Resolution", VtkUnityWorkbenchHelpers.INTEGER);
+        var coneAngle = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Angle", VtkUnityWorkbenchHelpers.DOUBLE);
+        var coneCapping = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Capping", VtkUnityWorkbenchHelpers.INTEGER);
+        var coneCenter = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Center", VtkUnityWorkbenchHelpers.DOUBLE3);
+        var coneDirection = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Direction", VtkUnityWorkbenchHelpers.DOUBLE3);
 
         var descriptor = VtkUnityWorkbenchPlugin.GetDescriptor(id);
 

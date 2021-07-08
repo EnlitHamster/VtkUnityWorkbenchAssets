@@ -48,7 +48,7 @@ public class LandmarksDepthTestVtk : MonoBehaviour {
 		int nLandmarksHeight = (int)Math.Ceiling(volumeHeight / LandmarkSpacing);
 		_halfVolumeDepth = 0.5f * volumeSpacingM.z * (volumeExtentsMax.z - volumeExtentsMin.z);
 
-		const int sphere = 1;
+		const string sphere = "vtkSphereSource";
 		const bool wireframe = false;
 
 		Vector3 scale = new Vector3(LandmarkScale, LandmarkScale, LandmarkScale);
