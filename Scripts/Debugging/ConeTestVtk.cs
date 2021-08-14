@@ -45,9 +45,11 @@ public class ConeTestVtk : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        const string cone = "vtkConeSource";
-        const bool wireframe = false;
-
+		// Setting correct localization
+		System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+		customCulture.NumberFormat.NumberDecimalSeparator = ".";
+		System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+		
         Vector3 scale = new Vector3(ConeScale, ConeScale, ConeScale);
         Quaternion rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
         Matrix4x4 transform = Matrix4x4.identity;
@@ -55,7 +57,7 @@ public class ConeTestVtk : MonoBehaviour
         VtkToUnityPlugin.Float4 colour = new VtkToUnityPlugin.Float4();
         colour.SetXYZW(0.0f, 0.0f, 1.0f, 1.0f);
 
-        int id = VtkToUnityPlugin.AddShapePrimitive(cone, colour, wireframe);
+        int id = VtkToUnityPlugin.VtkResource_CallObject("vtkConeSource");
 
         IdPosition idPosition = new IdPosition();
         idPosition.Id = id;
@@ -72,24 +74,26 @@ public class ConeTestVtk : MonoBehaviour
 
         _shapeIdPositions.Add(idPosition);
 
-        VtkUnityWorkbenchPlugin.SetProperty<double>(id, "Height", 0.1f);
-        VtkUnityWorkbenchPlugin.SetProperty<double>(id, "Radius", 0.1f);
-        VtkUnityWorkbenchPlugin.SetProperty(id, "Resolution", 200);
+        VtkUnityWorkbenchPlugin.SetProperty(id, "Height", "f", 0.1f.ToString());
+        VtkUnityWorkbenchPlugin.SetProperty(id, "Radius", "f", 0.1f.ToString());
+        VtkUnityWorkbenchPlugin.SetProperty(id, "Resolution", "d", 200.ToString());
 
-        var coneHeight = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Height", VtkUnityWorkbenchHelpers.DOUBLE);
-        var coneRadius = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Radius", VtkUnityWorkbenchHelpers.DOUBLE);
-        var coneResolution = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Resolution", VtkUnityWorkbenchHelpers.INTEGER);
-        var coneAngle = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Angle", VtkUnityWorkbenchHelpers.DOUBLE);
-        var coneCapping = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Capping", VtkUnityWorkbenchHelpers.INTEGER);
-        var coneCenter = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Center", VtkUnityWorkbenchHelpers.DOUBLE3);
-        var coneDirection = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Direction", VtkUnityWorkbenchHelpers.DOUBLE3);
+		VtkToUnityPlugin.VtkResource_AddActor(id, colour, false);
 
-        var descriptor = VtkUnityWorkbenchPlugin.GetDescriptor(id);
+        //var coneHeight = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Height");
+        //var coneRadius = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Radius");
+        //var coneResolution = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Resolution");
+        //var coneAngle = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Angle");
+        //var coneCapping = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Capping");
+        //var coneCenter = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Center");
+        //var coneDirection = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Direction");
 
-        var coneFactory = new VtkConeSourceUIFactory();
-        VtkUnityWorkbenchPlugin.RegisterComponentFactory("vtkConeSource", coneFactory);
+        //var descriptor = VtkUnityWorkbenchPlugin.GetDescriptor(id);
 
-        VtkUnityWorkbenchPlugin.ShowComponentFor("vtkConeSource");
+        //var coneFactory = new VtkConeSourceUIFactory();
+        //VtkUnityWorkbenchPlugin.RegisterComponentFactory("vtkConeSource", coneFactory);
+
+        //VtkUnityWorkbenchPlugin.ShowComponentFor("vtkConeSource");
     }
 
     void OnDestroy()

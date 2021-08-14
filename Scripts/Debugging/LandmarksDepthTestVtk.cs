@@ -69,7 +69,7 @@ public class LandmarksDepthTestVtk : MonoBehaviour {
 				VtkToUnityPlugin.Float4 colour = new VtkToUnityPlugin.Float4();
 				colour.SetXYZW(red, green, blue, 1.0f);
 
-				int id = VtkToUnityPlugin.AddShapePrimitive(sphere, colour, wireframe);
+				int id = VtkToUnityPlugin.VtkResource_CallObjectAndShow(sphere, colour, wireframe);
 
 				IdPosition idPosition = new IdPosition();
 				idPosition.Id = id;
