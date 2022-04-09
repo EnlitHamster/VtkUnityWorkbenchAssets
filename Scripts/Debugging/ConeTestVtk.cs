@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices;
+using UnityEngine.Profiling;
 
 using ThreeDeeHeartPlugins;
 using VtkUnityWorkbench;
@@ -57,6 +58,12 @@ public class ConeTestVtk : MonoBehaviour
         VtkToUnityPlugin.Float4 colour = new VtkToUnityPlugin.Float4();
         colour.SetXYZW(0.0f, 0.0f, 1.0f, 1.0f);
 
+        Profiler.logFile = "coneTest";
+        Profiler.enableBinaryLog = true;
+        Profiler.enabled = true;
+
+        Profiler.BeginSample("Cone Source Creation");
+
         int id = VtkToUnityPlugin.VtkResource_CallObject("vtkConeSource");
 
         IdPosition idPosition = new IdPosition();
@@ -77,6 +84,8 @@ public class ConeTestVtk : MonoBehaviour
         VtkUnityWorkbenchPlugin.SetProperty(id, "Height", "f", 0.1f.ToString());
         VtkUnityWorkbenchPlugin.SetProperty(id, "Radius", "f", 0.1f.ToString());
         VtkUnityWorkbenchPlugin.SetProperty(id, "Resolution", "d", 200.ToString());
+
+        Profiler.EndSample();
 
 		VtkToUnityPlugin.VtkResource_AddActor(id, colour, false);
 
@@ -105,6 +114,7 @@ public class ConeTestVtk : MonoBehaviour
         }
 
         VtkUnityWorkbenchPlugin.DestroyComponentFor("vtkConeSource");
+        Profiler.enabled = false;
     }
 
     // Update is called once per frame
@@ -117,6 +127,7 @@ public class ConeTestVtk : MonoBehaviour
 
         foreach (var idPosition in _shapeIdPositions)
         {
+            Profiler.BeginSample("Cone Source Update");
             Vector3 scale = new Vector3(
                 idPosition.PositionScale.w,
                 idPosition.PositionScale.w,
@@ -134,6 +145,7 @@ public class ConeTestVtk : MonoBehaviour
 
             VtkToUnityPlugin.Float16 transformArray = VtkToUnityPlugin.UnityMatrix4x4ToFloat16(transformMatrix);
             VtkToUnityPlugin.SetProp3DTransform(idPosition.Id, transformArray);
+            Profiler.EndSample();
         }
     }
 }
