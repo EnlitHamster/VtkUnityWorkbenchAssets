@@ -8,6 +8,8 @@ using UnityEngine.Profiling;
 
 using ThreeDeeHeartPlugins;
 using VtkUnityWorkbench;
+using System.Diagnostics;
+using System.IO;
 
 class VtkConeSourceUIFactory : IComponentFactory
 {
@@ -41,13 +43,79 @@ public class ConeTestVtk : MonoBehaviour
         public VtkToUnityPlugin.Float4 PositionScale;
     }
 
+    struct Preset
+    {
+        public float Height;
+        public float Radius;
+        public int Resolution;
+    }
+
+    private bool useDefault = true;
+    private Preset defaultPreset = new Preset();
+    private Preset transformedPreset = new Preset();
+
+    IEnumerator TransformCone()
+    {
+        for(;;)
+        {
+
+            foreach (var idPosition in _shapeIdPositions)
+            {
+                Preset preset = useDefault ? defaultPreset : transformedPreset;
+                int id = idPosition.Id;
+
+                time("set_height", () => VtkUnityWorkbenchPlugin.SetProperty(id, "Height", "f", preset.Height.ToString()));
+                time("set_radius", () => VtkUnityWorkbenchPlugin.SetProperty(id, "Radius", "f", preset.Radius.ToString()));
+                time("set_resolution", () => VtkUnityWorkbenchPlugin.SetProperty(id, "Resolution", "d", preset.Resolution.ToString()));
+
+            }
+            useDefault = !useDefault;
+            yield return new WaitForSeconds(2.0f);
+        }
+    }
+
+    float avgFramerate, timer, refresh;
+    StringBuilder fpsBuffer;
+
+    private static StringBuilder perfBuffer = new StringBuilder();
+
+    private static T time<T>(string name, Func<T> f)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+        T r = f();
+        sw.Stop();
+        double ns = ((double)sw.ElapsedTicks / (double)Stopwatch.Frequency);
+        perfBuffer.Append(string.Format("{0},{1};", name, ns.ToString()));
+        return r;
+    }
+
+    private static void time(string name, Action a)
+    {
+        Stopwatch sw = Stopwatch.StartNew();
+        a();
+        sw.Stop();
+        double ns = ((double)sw.ElapsedTicks / (double)Stopwatch.Frequency);
+        perfBuffer.Append(string.Format("{0},{1};", name, ns.ToString()));
+    }
+
     private List<IdPosition> _shapeIdPositions = new List<IdPosition>();
 
     // Start is called before the first frame update
     void Start()
     {
-		// Setting correct localization
-		System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+        // Create cone value presets
+        defaultPreset.Height = 0.1f;
+        defaultPreset.Radius = 0.1f;
+        defaultPreset.Resolution = 200;
+
+        transformedPreset.Height = 0.2f;
+        transformedPreset.Radius = 0.05f;
+        transformedPreset.Resolution = 500;
+
+        fpsBuffer = new StringBuilder();
+
+        // Setting correct localization
+        System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
 		customCulture.NumberFormat.NumberDecimalSeparator = ".";
 		System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 		
@@ -58,13 +126,13 @@ public class ConeTestVtk : MonoBehaviour
         VtkToUnityPlugin.Float4 colour = new VtkToUnityPlugin.Float4();
         colour.SetXYZW(0.0f, 0.0f, 1.0f, 1.0f);
 
-        Profiler.logFile = "coneTest";
+        Profiler.logFile = "coneTestWithTransforms";
         Profiler.enableBinaryLog = true;
         Profiler.enabled = true;
 
         Profiler.BeginSample("Cone Source Creation");
 
-        int id = VtkToUnityPlugin.VtkResource_CallObject("vtkConeSource");
+        int id = time("cone_inst", () => VtkToUnityPlugin.VtkResource_CallObject("vtkConeSource"));
 
         IdPosition idPosition = new IdPosition();
         idPosition.Id = id;
@@ -81,37 +149,28 @@ public class ConeTestVtk : MonoBehaviour
 
         _shapeIdPositions.Add(idPosition);
 
-        VtkUnityWorkbenchPlugin.SetProperty(id, "Height", "f", 0.1f.ToString());
-        VtkUnityWorkbenchPlugin.SetProperty(id, "Radius", "f", 0.1f.ToString());
-        VtkUnityWorkbenchPlugin.SetProperty(id, "Resolution", "d", 200.ToString());
+        time("set_height", () => VtkUnityWorkbenchPlugin.SetProperty(id, "Height", "f", defaultPreset.Height.ToString()));
+        time("set_radius", () => VtkUnityWorkbenchPlugin.SetProperty(id, "Radius", "f", defaultPreset.Radius.ToString()));
+        time("set_resolution", () => VtkUnityWorkbenchPlugin.SetProperty(id, "Resolution", "d", defaultPreset.Resolution.ToString()));
 
         Profiler.EndSample();
 
 		VtkToUnityPlugin.VtkResource_AddActor(id, colour, false);
 
-        //var coneHeight = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Height");
-        //var coneRadius = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Radius");
-        //var coneResolution = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Resolution");
-        //var coneAngle = VtkUnityWorkbenchPlugin.GetProperty<double>(id, "Angle");
-        //var coneCapping = VtkUnityWorkbenchPlugin.GetProperty<int>(id, "Capping");
-        //var coneCenter = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Center");
-        //var coneDirection = VtkUnityWorkbenchPlugin.GetProperty<Double3>(id, "Direction");
-
-        //var descriptor = VtkUnityWorkbenchPlugin.GetDescriptor(id);
-
-        //var coneFactory = new VtkConeSourceUIFactory();
-        //VtkUnityWorkbenchPlugin.RegisterComponentFactory("vtkConeSource", coneFactory);
-
-        //VtkUnityWorkbenchPlugin.ShowComponentFor("vtkConeSource");
+        StartCoroutine("TransformCone");
     }
 
     void OnDestroy()
     {
-        Debug.Log("ConeTestVtk::OnDestroy");
+        UnityEngine.Debug.Log("ConeTestVtk::OnDestroy");
         foreach (var idPosition in _shapeIdPositions)
         {
             VtkToUnityPlugin.RemoveProp3D(idPosition.Id);
         }
+        _shapeIdPositions.Clear();
+
+        File.WriteAllLines("fpsConeWithTransforms.csv", fpsBuffer.ToString().Split(';'));
+        File.WriteAllLines("perffpsConeWithTransforms.csv", perfBuffer.ToString().Split(';'));
 
         VtkUnityWorkbenchPlugin.DestroyComponentFor("vtkConeSource");
         Profiler.enabled = false;
@@ -147,5 +206,12 @@ public class ConeTestVtk : MonoBehaviour
             VtkToUnityPlugin.SetProp3DTransform(idPosition.Id, transformArray);
             Profiler.EndSample();
         }
+
+        // Updating FPS
+        float timelapse = Time.smoothDeltaTime;
+        timer = timer <= 0 ? refresh : timer -= timelapse;
+
+        if (timer <= 0) avgFramerate = (int)(1f / timelapse);
+        fpsBuffer.Append(string.Format("{0},{1},{2},{3};", avgFramerate.ToString(), timer.ToString(), refresh.ToString(), timelapse.ToString()));
     }
 }
