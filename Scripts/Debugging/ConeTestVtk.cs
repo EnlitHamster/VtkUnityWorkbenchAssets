@@ -170,7 +170,7 @@ public class ConeTestVtk : MonoBehaviour
         _shapeIdPositions.Clear();
 
         File.WriteAllLines("fpsConeWithTransforms.csv", fpsBuffer.ToString().Split(';'));
-        File.WriteAllLines("perffpsConeWithTransforms.csv", perfBuffer.ToString().Split(';'));
+        File.WriteAllLines("perfConeWithTransforms.csv", perfBuffer.ToString().Split(';'));
 
         VtkUnityWorkbenchPlugin.DestroyComponentFor("vtkConeSource");
         Profiler.enabled = false;

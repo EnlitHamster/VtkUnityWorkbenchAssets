@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.UI;
 using System.Runtime.InteropServices;
-using UnityEngine.Profiling;
 
 using ThreeDeeHeartPlugins;
 using VtkUnityWorkbench;
@@ -62,7 +61,7 @@ public class StreamtracerTestVtk : MonoBehaviour
         Stopwatch sw = Stopwatch.StartNew();
         a();
         sw.Stop();
-        double ns = ((double)sw.ElapsedTicks / (double)Stopwatch.Frequency);
+        double ns = ((double) sw.ElapsedTicks / (double) Stopwatch.Frequency);
         perfBuffer.Append(string.Format("{0},{1};", name, ns.ToString()));
     }
     
@@ -96,7 +95,7 @@ public class StreamtracerTestVtk : MonoBehaviour
         Profiler.enableBinaryLog = true;
         Profiler.enabled = true;
 
-        Profiler.BeginSample("Cone Source Creation");
+        Profiler.BeginSample("Stream Tracer Creation");
 
         int reader = time("reader_inst", () => VtkToUnityPlugin.VtkResource_CallObject("vtkStructuredGridReader"));
 		int seeds = time("seeds_inst", () => VtkToUnityPlugin.VtkResource_CallObject("vtkPointSource"));
@@ -166,8 +165,8 @@ public class StreamtracerTestVtk : MonoBehaviour
 			VtkToUnityPlugin.RemoveProp3D(idPosition.Id);
 		}
 
-        File.WriteAllLines("fps.csv", fpsBuffer.ToString().Split(';'));
-        File.WriteAllLines("perf.csv", perfBuffer.ToString().Split(';'));
+        File.WriteAllLines("fps_stream_tracer_1000_vr.csv", fpsBuffer.ToString().Split(';'));
+        File.WriteAllLines("perf_stream_tracer_1000_vr.csv", perfBuffer.ToString().Split(';'));
         Profiler.enabled = false;
     }
 
@@ -181,7 +180,7 @@ public class StreamtracerTestVtk : MonoBehaviour
 
 		foreach (var idPosition in _shapeIdPositions)
         {
-            Profiler.BeginSample("Cone Source Update");
+            Profiler.BeginSample("Stream Stracer Update");
             time("update", () =>
             {
                 Vector3 scale = new Vector3(
